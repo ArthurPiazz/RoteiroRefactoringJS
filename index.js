@@ -10,13 +10,16 @@ function gerarFaturaStr (fatura, pecas) {
   
     for (let apre of fatura.apresentacoes) {
       const peca = pecas[apre.id];
+      function calcularTotalApresentacao(apre, peca) {
       let total = 0;
   
       switch (peca.tipo) {
       case "tragedia":
         total = 40000;
         if (apre.audiencia > 30) {
-          total += 1000 * (apre.audiencia - 30);
+          return total += 1000 * (apre.audiencia - 30);
+        }else{
+          return total;
         }
         break;
       case "comedia":
@@ -24,12 +27,13 @@ function gerarFaturaStr (fatura, pecas) {
         if (apre.audiencia > 20) {
            total += 10000 + 500 * (apre.audiencia - 20);
         }
-        total += 300 * apre.audiencia;
+        return total += 300 * apre.audiencia;
         break;
       default:
           throw new Error(`Peça desconhecia: ${peca.tipo}`);
       }
-  
+    }
+    let total = calcularTotalApresentacao(apre, peca);
       // créditos para próximas contratações
       creditos += Math.max(apre.audiencia - 30, 0);
       if (peca.tipo === "comedia") 
